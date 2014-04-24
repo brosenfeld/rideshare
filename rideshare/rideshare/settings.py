@@ -16,11 +16,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
+# Way to set the Secret Key without including it in the settings file
+# From Two Scoops of Django
+from django.core.exceptions import ImproperlyConfigured
+
+def get_env_variable(var_name):
+    """Get the environment variable or return exception."""
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "Set the %s environment variable" % var_name
+        raise ImproperlyConfigured(error_msg)
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '73p_(m%-6$f2dy_murg%r8nuv9g#(19i1(4mvs#w+(e0s7hlu^'
+SECRET_KEY = get_env_variable("SECRET_KEY")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
