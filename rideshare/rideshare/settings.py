@@ -100,7 +100,7 @@ STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, '../rideshare/ride/static'),
+    os.path.join(BASE_DIR, '../rideshare/rides/static'),
 )
 
 STATICFILES_FINDERS = ( 
