@@ -3,27 +3,17 @@ from django.contrib.auth.models import User
 
 import datetime
 
-class City(models.Model):
-	name = models.CharField(max_length=15)
-
-	def __unicode__(self):
-		return self.name
-
-class Event(models.Model):
-	name = models.CharField(max_length=30)
-	creator = models.ForeignKey(User)
-	city = models.ForeignKey(City)
-	date = models.DateTimeField()
-	address = models.CharField(max_length=50)
-
-	def __unicode__(self):
-		return self.name
-
 class Ride(models.Model):
-	event = models.ForeignKey(Event)
+
+	direction_choices = (
+        (True, "TO"),
+        (False, "FROM"),
+    )
+
+	event = models.CharField(max_length=20)
 	time = models.DateTimeField()
-	start = models.CharField(max_length=30)
-	end = models.CharField(max_length=30)
+	direction = models.BooleanField(choices=direction_choices)
+	location = models.CharField(max_length=50)
 
 	def __unicode__(self):
-		return self.start + " " + str(self.time)
+		return self.location + " " + str(self.time)
