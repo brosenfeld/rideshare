@@ -6,7 +6,7 @@ import datetime
 
 class Rider(models.Model):
 	user = models.OneToOneField(User)
-	eventbrite = models.BigIntegerField()
+	eventbrite = models.CharField(max_length=30)
 	access_token = models.CharField(max_length=30)
 
 	def __unicode__(self):

@@ -60,7 +60,7 @@ def linkRider(request, access_token):
 		rider = Rider()
 
 	rider.user = request.user
-	rider.eventbrite = int(rider_id)
+	rider.eventbrite = rider_id
 	rider.access_token = access_token
 	rider.save()
 
