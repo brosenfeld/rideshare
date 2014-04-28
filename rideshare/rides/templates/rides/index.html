@@ -1,3 +1,29 @@
 <h1>Welcome to Rideshare</h1>
 
-User = {{ access_token }}
+Hi, {{ rider.first }}!
+
+<br><br><br>
+Your profile <br><br><br>
+<table>
+	<tbody>
+		<tr>
+			<th>First</th>
+			<th>Last</th>
+			<th>Email</th>
+			<th>ID</th>
+		<tr>
+		<tr>
+			<td>{{ rider.first }}</td>
+			<td>{{ rider.last }}</td>
+			<td>{{ rider.email }}</td>
+			<td>{{ rider.eventbrite }}</td>
+		</tr>
+	</tbody>
+</table>
+<br><br>
+Your Events:
+<ul>
+{% for id, name in events.items %}
+	<li>{{ name }}: {{ id }} </li>
+{% endfor %}
+</ul>
