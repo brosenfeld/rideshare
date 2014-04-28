@@ -90,7 +90,7 @@ def event_details(request, event_id):
 		return render(request, 'events/invalid.html', {})
 
 	name = response["name"]["text"]
-	description = response["description"]["text"]
+	description = response["description"]["html"]
 	organizer = response["organizer"]["name"]
 	venue = response["venue"]["name"]
 	start = datetime.strptime(response["start"]["local"], "%Y-%m-%dT%H:%M:%S")

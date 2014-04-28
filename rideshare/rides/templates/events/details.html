@@ -2,7 +2,7 @@
 <h3>{{ organizer }}</h3>
 <h3>{{ venue }}</h3>
 <h4>{{ start }} - {{ end }}</h4>
-<p>{{ description }}</p>
+<p>{% autoescape off %}{{ description }}{% endautoescape %}</p>
 
 <h2>Rides</h2>
 {% if rides %}
