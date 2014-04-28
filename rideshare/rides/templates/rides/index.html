@@ -3,7 +3,7 @@
 Hi, {{ rider.first }}!
 
 <br><br><br>
-Your profile <br><br><br>
+Your profile <br><br>
 <table>
 	<tbody>
 		<tr>
@@ -22,8 +22,14 @@ Your profile <br><br><br>
 </table>
 <br><br>
 Your Events:
-<ul>
-{% for id, name in events.items %}
-	<li>{{ name }}: {{ id }} </li>
-{% endfor %}
-</ul>
+{% if events %}
+	<br><br>
+	<table>
+		<tbody>
+			<tr><th>Event</th><th>ID</th><th>Rides</th>
+			{% for id, name in events.items %}
+				<tr><td>{{ name }}</td><td>{{ id }}</td><td><a href="{% url 'rides:event_details' id %}">Details</a></td></tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endif %}

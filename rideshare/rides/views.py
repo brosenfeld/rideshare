@@ -4,9 +4,11 @@ from rides.models import Rider, Ride
 
 import requests
 import json
+from datetime import datetime
 
 CLIENT_KEY = "BBGT36XVYX5H2RXV7I"
 CLIENT_SECRET = "367KMPCJEB7JMNMVIIWGYMRV5WVWRVV7FOEXA66WO7I43CU5I4"
+MY_TOKEN = "6J5TDH6BJRP4BKARHCMJ"
 
 def postCode(code):
 	url = "https://www.eventbrite.com/oauth/token"
@@ -41,9 +43,6 @@ def userEvents(access_token):
 	return events
 
 def getRider(access_token):
-
-#{u'first_name': u'Brian', u'last_name': u'Rosenfeld', u'emails': [{u'verified': True, u'email': u'brianmr@princeton.edu', u'primary': True}], u'name': u'Brian Rosenfeld', u'id': u'76970078231'}
-
 	r = requests.get("https://www.eventbriteapi.com/v3/users/me/?token=" + access_token)
 	response = json.loads(r.text)
 
@@ -83,6 +82,22 @@ def welcome(request):
 
 	return HttpResponseRedirect("https://www.eventbrite.com/oauth/authorize?response_type=code&client_id=" + CLIENT_KEY)
 
-# Create your views here.
+def event_details(request, event_id):
+	r = requests.get("https://www.eventbriteapi.com/v3/events/" + event_id + "?token=" + MY_TOKEN)
+	response = json.loads(r.text)
 
-#http://localhost:8000/
+	if 'error_description' in response:
+		return render(request, 'events/invalid.html', {})
+
+	name = response["name"]["text"]
+	description = response["description"]["text"]
+	organizer = response["organizer"]["name"]
+	venue = response["venue"]["name"]
+	start = datetime.strptime(response["start"]["local"], "%Y-%m-%dT%H:%M:%S")
+	end = datetime.strptime(response["end"]["local"], "%Y-%m-%dT%H:%M:%S")
+
+	rides = Ride.objects.filter(event=event_id)
+
+	context = {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end, "rides": rides}
+
+	return render(request, 'events/details.html', context)
