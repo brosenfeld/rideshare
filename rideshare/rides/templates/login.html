@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RideShare</title>
+    </head>
+
+    <body>
+        <h1>{{ title }}</h1>
+        <form id="form" method="post" action="">
+  
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            <table>
+            {% for field in form.visible_fields %}
+                <tr>
+                    <td>{{ field.label }}</td>
+                    <td>{{ field }}</td>                 
+                    <td>{{ field.help_text}}</td>
+                    {% if field.errors %}
+                        <td class="alert alert-danger">{{ field.errors }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </table>
+         <input type="submit" class="" name="submit" value="Submit" />
+        </form>
+    </body>
+</html>

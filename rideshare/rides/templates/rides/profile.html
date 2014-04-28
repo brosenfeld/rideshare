@@ -1,6 +1,6 @@
 <h1>Welcome to Rideshare</h1>
 
-Hi, {{ rider.first }}!
+Hi, {{ rider.user.first_name }}!
 
 <br><br><br>
 Your profile <br><br>
@@ -13,9 +13,9 @@ Your profile <br><br>
 			<th>ID</th>
 		<tr>
 		<tr>
-			<td>{{ rider.first }}</td>
-			<td>{{ rider.last }}</td>
-			<td>{{ rider.email }}</td>
+			<td>{{ rider.user.first_name }}</td>
+			<td>{{ rider.user.last_name }}</td>
+			<td>{{ rider.user.email }}</td>
 			<td>{{ rider.eventbrite }}</td>
 		</tr>
 	</tbody>

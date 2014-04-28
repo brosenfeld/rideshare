@@ -1,15 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 import datetime
 
 class Rider(models.Model):
-	first = models.CharField(max_length=20)
-	last = models.CharField(max_length=20)
-	email = models.CharField(max_length=25)
+	user = models.OneToOneField(User)
 	eventbrite = models.PositiveIntegerField()
+	access_token = models.CharField(max_length=30)
 
 	def __unicode__(self):
-		return self.first + " " + self.last + " " + str(self.eventbrite)
+		return self.user.first_name + " " + self.user.last_name + " " + str(self.eventbrite)
 
 class Ride(models.Model):
 

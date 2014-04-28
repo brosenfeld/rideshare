@@ -1,6 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from rides.models import Rider, Ride
+from rides.forms import UserForm, UserLoginForm
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
+from django.core.urlresolvers import reverse
 
 import requests
 import json
@@ -42,28 +48,28 @@ def userEvents(access_token):
 
 	return events
 
-def getRider(access_token):
+def linkRider(request, access_token):
 	r = requests.get("https://www.eventbriteapi.com/v3/users/me/?token=" + access_token)
 	response = json.loads(r.text)
 
 	rider_id = response['id']
 
 	try:
-		rider = Rider.objects.get(eventbrite=rider_id)
+		rider = Rider.objects.get(user=request.user)
 	except Rider.DoesNotExist:
 		rider = Rider()
-		rider.first = response['first_name']
-		rider.last = response['last_name']
-		rider.email = response['emails'][0]['email']
-		rider.eventbrite = int(response['id'])
-		rider.save()
 
-	return rider
+	rider.user = request.user
+	rider.eventbrite = int(rider_id)
+	rider.access_token = access_token
+	rider.save()
 
-def index(request):
+@login_required
+def eventbrite_permission(request):
     return HttpResponseRedirect("https://www.eventbrite.com/oauth/authorize?response_type=code&client_id=" + CLIENT_KEY)
 
-def welcome(request):
+@login_required
+def eventbrite_link(request):
 	if request.method == 'GET':
 		if 'code' in request.GET:
 			access_token = postCode(request.GET['code'])
@@ -71,16 +77,22 @@ def welcome(request):
 			if access_token == "error":
 				return render(request, 'rides/missing.html', {})
 
-			rider = getRider(access_token)
-			events = userEvents(access_token)
+			linkRider(request, access_token)
 
-			context = {"events": events, "rider": rider}
-			return render(request, 'rides/index.html', context)
-
-		else:
-			return render(request, 'rides/missing.html', {})
+			return HttpResponseRedirect(reverse('rides:welcome'))
 
 	return HttpResponseRedirect("https://www.eventbrite.com/oauth/authorize?response_type=code&client_id=" + CLIENT_KEY)
+
+def index(request):
+	return render(request, 'index.html', {})
+
+@login_required
+def welcome(request):
+	rider = Rider.objects.get(user=request.user)
+	events = userEvents(rider.access_token)
+
+	context = {"events": events, "rider": rider}
+	return render(request, 'rides/profile.html', context)
 
 def event_details(request, event_id):
 	r = requests.get("https://www.eventbriteapi.com/v3/events/" + event_id + "?token=" + MY_TOKEN)
@@ -101,3 +113,52 @@ def event_details(request, event_id):
 	context = {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end, "rides": rides}
 
 	return render(request, 'events/details.html', context)
+
+# Based off http://www.tangowithdjango.com/book/chapters/login.html
+def user_register(request):
+	if request.method == 'POST':
+		# Attempt to grab information from the raw form information.
+		# Note that we make use of both UserForm and UserProfileForm.
+		user_form = UserForm(data=request.POST)
+
+		if user_form.is_valid():
+			user = user_form.save()
+			password = user.password
+			user.set_password(user.password)
+			user.save()
+			u = authenticate(username=user.username, password=password)
+			login(request, u)
+			return HttpResponseRedirect(reverse('rides:eventbrite_permission'))
+
+	else:
+		user_form = UserForm()
+
+	return render(request, 'register.html', {'form': user_form})
+
+# modified from my 333 project (worked on with Ed Walker)
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        username = request.POST["username"]
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                if request.GET and request.GET["next"]:
+                    return HttpResponseRedirect(request.GET["next"])
+                return HttpResponseRedirect(reverse('rides:welcome'))
+        else:        
+            form = UserLoginForm()
+            form.fields['username'].initial = username
+            context = {'form':form, 'title':'Invalid account information'}
+
+    else:
+        form = UserLoginForm()
+        context = {'form':form, 'title':'Login'}
+    return render(request, 'login.html', context)
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('rides:index'))
