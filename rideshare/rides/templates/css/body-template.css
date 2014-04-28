@@ -1,0 +1,15 @@
+body {
+  padding-top: 50px;
+}
+
+.body-template {
+  padding: 40px 15px;
+  padding-left: 50px;
+  text-align: center;
+  color: #000;
+  background-color: #fff;
+}
+.logo-template {
+  padding: 50px 15px;
+  text-align: right;
+}
