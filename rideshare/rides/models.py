@@ -15,13 +15,13 @@ class Rider(models.Model):
 class Ride(models.Model):
 
 	direction_choices = (
-        (True, "TO"),
-        (False, "FROM"),
+        ("To Event", "To Event"),
+        ("From Event", "From Event"),
     )
 
 	event = models.CharField(max_length=20)
 	time = models.DateTimeField()
-	direction = models.BooleanField(choices=direction_choices)
+	direction = models.CharField(max_length=10, choices=direction_choices)
 	location = models.CharField(max_length=50)
 	riders = models.ManyToManyField(Rider)
 

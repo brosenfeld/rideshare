@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from rides.models import Rider, Ride
-from rides.forms import UserForm, UserLoginForm
+from rides.forms import UserForm, UserLoginForm, RideForm
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -94,6 +94,7 @@ def welcome(request):
 	context = {"events": events, "rider": rider}
 	return render(request, 'rides/profile.html', context)
 
+@login_required
 def event_details(request, event_id):
 	r = requests.get("https://www.eventbriteapi.com/v3/events/" + event_id + "?token=" + MY_TOKEN)
 	response = json.loads(r.text)
@@ -110,9 +111,23 @@ def event_details(request, event_id):
 
 	rides = Ride.objects.filter(event=event_id)
 
-	context = {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end, "rides": rides}
+	context = {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end, "rides": rides, "id": event_id}
 
 	return render(request, 'events/details.html', context)
+
+@login_required
+def ride_add(request, event_id):
+	if request.method == 'POST':
+		form = RideForm(request.POST)
+		if form.is_valid():
+			ride = form.save(commit=False)
+			ride.event = event_id
+			ride.save()
+			return HttpResponseRedirect(reverse('rides:event_details', args=(event_id,)))
+	else:
+		form = RideForm()
+	context = {'form':form}
+	return render(request, 'rides/add.html', context)
 
 # Based off http://www.tangowithdjango.com/book/chapters/login.html
 def user_register(request):

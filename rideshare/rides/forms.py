@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from rides.models import Ride
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -12,6 +13,13 @@ class UserForm(forms.ModelForm):
 class UserLoginForm(forms.ModelForm):
     username = forms.CharField(max_length=75, help_text="", label="Username")
     password = forms.CharField(widget=forms.PasswordInput(), label="Password")
+
     class Meta:
         model = User
         fields = ('username', 'password')
+
+class RideForm(forms.ModelForm):
+
+	class Meta:
+		model = Ride
+		fields = ('time', 'direction', 'location')

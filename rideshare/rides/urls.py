@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^event/(?P<event_id>\d+)/details/$', views.event_details, name='event_details'),
     url(r'^register/$', views.user_register, name='user_register'),
     url(r'^accounts/login/', views.user_login, name='user_login'),
-    url(r'^accounts/logout/', views.user_logout, name='user_logout')
+    url(r'^accounts/logout/', views.user_logout, name='user_logout'),
+    url(r'^event/(?P<event_id>\d+)/rides/add$', views.ride_add, name='ride_add')
 )
