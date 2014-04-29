@@ -86,6 +86,12 @@ def eventbrite_link(request):
 def index(request):
 	return render(request, 'index.html', {})
 
+def about(request):
+        return render(request, 'about.html', {})
+
+def contact(request):
+        return render(request, 'contact.html', {})
+
 @login_required
 def welcome(request):
 	rider = Rider.objects.get(user=request.user)
