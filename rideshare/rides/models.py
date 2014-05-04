@@ -22,7 +22,7 @@ class Ride(models.Model):
 	event = models.CharField(max_length=20)
 	time = models.DateTimeField()
 	direction = models.CharField(max_length=10, choices=direction_choices)
-	location = models.CharField(max_length=50)
+	location = models.CharField(max_length=100)
 	riders = models.ManyToManyField(Rider)
 
 	def __unicode__(self):
