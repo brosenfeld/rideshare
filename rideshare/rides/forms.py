@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from rides.models import Ride
 
+from datetime import datetime
+
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
 
@@ -19,7 +21,15 @@ class UserLoginForm(forms.ModelForm):
         fields = ('username', 'password')
 
 class RideForm(forms.ModelForm):
+    date = forms.DateField()
+    time = forms.TimeField(input_formats = ['%H:%M', '%I:%M%p', '%I:%M %p'] )
 
-	class Meta:
-		model = Ride
-		fields = ('time', 'direction', 'location')
+    class Meta:
+        model = Ride
+        fields = ('date', 'time', 'direction', 'location')
+
+    def clean_time(self):
+        time = self.cleaned_data['time']
+        date = self.cleaned_data['date']
+        return datetime.combine(date, time)
+
