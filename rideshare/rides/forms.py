@@ -23,6 +23,7 @@ class UserLoginForm(forms.ModelForm):
 class RideForm(forms.ModelForm):
     date = forms.DateField()
     time = forms.TimeField(input_formats = ['%H:%M', '%I:%M%p', '%I:%M %p'] )
+    direction = forms.ChoiceField(widget=forms.RadioSelect, choices=Ride.direction_choices)
 
     class Meta:
         model = Ride

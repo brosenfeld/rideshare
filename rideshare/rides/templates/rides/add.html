@@ -4,13 +4,15 @@
         <title>RideShare</title>
         {% load staticfiles %}
         <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+       <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" />
         <script src="{% static 'js/jquery.js' %}"></script>
         <script src="{% static 'js/jquery-ui-1.10.4.custom.min.js' %}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
         <script src="{% static 'js/custom.js' %}"></script>
     </head>
 
 
-    <body>
+    <body onload="initialize()">
         <h1>Add Ride</h1>
         <form id="form" method="post" action="">
   
