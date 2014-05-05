@@ -45,12 +45,16 @@ def userEvents(request, access_token):
 		event_id = event['id']
 		name = event['name']['text']
 
-		"""try:
+		try:
 			ride_to = rider.rides_set.get(event_id=event_id, direction="To Event")
-		except Exception, e: ride_to = None"""
+		except Exception, e: ride_to = None
+
+		try:
+			ride_from = rider.rides_set.get(event_id=event_id, direction="From Event")
+		except Exception, e: ride_from = None
 
 
-		events[event_id] = name
+		events[event_id] = [name, ride_to, ride_from]
 
 	return events
 

@@ -1,33 +1,15 @@
-<h1>Welcome to Rideshare</h1>
+{% extends 'base.html' %}
 
-Hi, {{ rider.user.first_name }}!
-
-<br><br><br>
-Your profile <br><br>
-<table>
-	<tbody>
-		<tr>
-			<th>First</th>
-			<th>Last</th>
-			<th>Email</th>
-			<th>ID</th>
-		<tr>
-		<tr>
-			<td>{{ rider.user.first_name }}</td>
-			<td>{{ rider.user.last_name }}</td>
-			<td>{{ rider.user.email }}</td>
-			<td>{{ rider.eventbrite }}</td>
-		</tr>
-	</tbody>
-</table>
-<br><br>
+{% block main %}
+<h1>Hi, {{ rider.user.first_name }}!</h1>
+<br>
 <h2>Your Events:</h2>
 {% if events %}
-	<table>
+	<table class="table">
 		<tr><th>Name</th><th>To</th><th>From</th>
 	{% for id, name in events.items %}
 		<tr>
-			<td><a href="{% url 'rides:event_details' id %}">{{ name }}</a></td>
+			<td><a href="{% url 'rides:event_details' id %}">{{ name.0 }}</a></td>
 			<td>To</td>
 			<td>From</td>
 		</tr>
@@ -37,8 +19,8 @@ Your profile <br><br>
 
 <h2>Your Rides:</h2>
 {% if rides %}
-	<table>
-		<tr><th>Time</th><Event><th>Location</th><th>Direction</th><th>View</th>
+	<table class="table">
+		<tr><th>Time</th><th>Event</th><th>Location</th><th>Direction</th><th>View</th>
 	{% for ride in rides %}
 		<tr>
 			<td>{{ ride.time }}</td>
@@ -50,3 +32,4 @@ Your profile <br><br>
 	{% endfor %}
 	</table>
 {% endif %}
+{% endblock %}
