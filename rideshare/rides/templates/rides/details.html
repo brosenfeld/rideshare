@@ -1,0 +1,9 @@
+<table>
+	<tr><th>Time:</th><td>{{ ride.time }}</td></tr>
+	<tr><th>Location:</th><td>{{ ride.location }}</td></tr>
+	<tr><th>Direction:</th><td>{{ ride.direction }}</td></tr>
+	<tr><th>Comments:</th><td>{{ ride.comments }}</td></tr>
+	<tr><th>Status:</th><td>{% if ride.isFull %}FULL{% else %}<a href="{% url 'rides:ride_join' ride.id %}">Join</a>{% endif %}</td></tr>
+</table>
+<br>
+<a href="{% url 'rides:event_details' ride.event %}">Return to Event Page</a>

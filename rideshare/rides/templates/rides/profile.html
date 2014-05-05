@@ -21,15 +21,23 @@ Your profile <br><br>
 	</tbody>
 </table>
 <br><br>
-Your Events:
+<h2>Your Events:</h2>
 {% if events %}
-	<br><br>
 	<table>
-		<tbody>
-			<tr><th>Event</th><th>ID</th><th>Rides</th>
-			{% for id, name in events.items %}
-				<tr><td>{{ name }}</td><td>{{ id }}</td><td><a href="{% url 'rides:event_details' id %}">Details</a></td></tr>
-			{% endfor %}
-		</tbody>
+		<tr><th>Name</th><th>To</th><th>From</th>
+	{% for id, name in events.items %}
+		<tr>
+			<td><a href="{% url 'rides:event_details' id %}">{{ name }}</a></td>
+			<td>To</td>
+			<td>From</td>
+		</tr>
+	{% endfor %}
 	</table>
+{% endif %}
+
+<h3>Your Rides:</h3>
+{% if rides %}
+	{% for ride in rides %}
+		<p>Hi</p>
+	{% endfor %}
 {% endif %}

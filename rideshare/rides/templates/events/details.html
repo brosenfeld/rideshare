@@ -9,13 +9,16 @@
 {% if rides_to %}
 
 	<table>
-		<tr><th>time</th><th>location</th><th>capacity</th><th>comments</th></tr>
+		<tr><th>Time</th><th>Location</th><th>Details</th></tr>
 		{% for ride in rides_to %}
 			<tr>
 				<td>{{ ride.time }}</td>
 				<td>{{ ride.location }}</td>
-				<td>{{ ride.capacity }}</td>
-				<td>{{ ride.comments }}</td>
+				{% if ride.isFull %}
+					<td>FULL</td>
+				{% else %}
+					<td><a href="{% url 'rides:ride_details' ride.id %}">View</a></td>
+				{% endif %}
 			</tr>
 		{% endfor %}
 	</table>
@@ -27,14 +30,16 @@
 {% if rides_from %}
 
 	<table>
-		<tr><th>time</th><th>location</th><th>capacity</th><th>comments</th></tr>
+		<tr><th>Time</th><th>Location</th><th>Details</th></tr>
 		{% for ride in rides_from %}
 			<tr>
 				<td>{{ ride.time }}</td>
 				<td>{{ ride.location }}</td>
-				<td>{{ ride.capacity }}</td>
-				<td>{{ ride.comments }}</td>
-			</tr>
+				{% if ride.isFull %}
+					<td>FULL</td>
+				{% else %}
+					<td><a href="{% url 'rides:ride_details' ride.id %}">View</a></td>
+				{% endif %}
 		{% endfor %}
 	</table>
 {% else %}

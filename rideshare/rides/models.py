@@ -32,4 +32,4 @@ class Ride(models.Model):
 
 	def isFull(self):
 		riders = Rider.objects.filter(ride=self).count()
-		full = (True if riders >= capacity else false)
+		return (True if riders >= self.capacity else False)

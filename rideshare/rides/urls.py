@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     url(r'^accounts/login/', views.user_login, name='user_login'),
     url(r'^accounts/logout/', views.user_logout, name='user_logout'),
     url(r'^event/(?P<event_id>\d+)/rides/add$', views.ride_add, name='ride_add'),
+    url(r'^ride/(?P<ride_id>\d+)/details$', views.ride_details, name='ride_details'),
+    url(r'^ride/(?P<ride_id>\d+)/join$', views.ride_join, name='ride_join'),
     url(r'^about/$', views.about, name='about'),
     url(r'^contact/$', views.contact, name='contact'),
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from rides.models import Rider, Ride
 from rides.forms import UserForm, UserLoginForm, RideForm
@@ -96,8 +96,9 @@ def contact(request):
 def welcome(request):
 	rider = Rider.objects.get(user=request.user)
 	events = userEvents(rider.access_token)
+	rides = rider.ride_set.all()
 
-	context = {"events": events, "rider": rider}
+	context = {"events": events, "rider": rider, "rides": rides}
 	return render(request, 'rides/profile.html', context)
 
 @login_required
@@ -130,11 +131,32 @@ def ride_add(request, event_id):
 			ride = form.save(commit=False)
 			ride.event = event_id
 			ride.save()
+			ride.riders.add(get_object_or_404(Rider, user=request.user))
 			return HttpResponseRedirect(reverse('rides:event_details', args=(event_id,)))
 	else:
 		form = RideForm()
 	context = {'form':form}
 	return render(request, 'rides/add.html', context)
+
+@login_required
+def ride_join(request, ride_id):
+	rider = get_object_or_404(Rider, user=request.user)
+	ride = get_object_or_404(Ride, id=ride_id)
+
+	if ride.isFull:
+		return HttpResponse("This ride is full")
+
+	if rider in ride.riders.all():
+		return HttpResponse("You are already taking this ride.")
+
+	ride.riders.add(rider)
+	return HttpResponseRedirect(reverse('rides:welcome'))
+
+@login_required
+def ride_details(request, ride_id):
+	ride = get_object_or_404(Ride, id=ride_id)
+	context = {"ride": ride}
+	return render(request, "rides/details.html", context)
 
 # Based off http://www.tangowithdjango.com/book/chapters/login.html
 def user_register(request):
