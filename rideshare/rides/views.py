@@ -34,7 +34,7 @@ def postCode(code):
 
 	return response["access_token"]
 
-def userEvents(access_token):
+def userEvents(request, access_token):
 	r = requests.get("https://www.eventbriteapi.com/v3/users/me/orders?token=" + access_token)
 	response = json.loads(r.text)
 
@@ -44,6 +44,12 @@ def userEvents(access_token):
 		event = order['event']
 		event_id = event['id']
 		name = event['name']['text']
+
+		"""try:
+			ride_to = rider.rides_set.get(event_id=event_id, direction="To Event")
+		except Exception, e: ride_to = None"""
+
+
 		events[event_id] = name
 
 	return events
@@ -92,17 +98,7 @@ def about(request):
 def contact(request):
         return render(request, 'contact.html', {})
 
-@login_required
-def welcome(request):
-	rider = Rider.objects.get(user=request.user)
-	events = userEvents(rider.access_token)
-	rides = rider.ride_set.all()
-
-	context = {"events": events, "rider": rider, "rides": rides}
-	return render(request, 'rides/profile.html', context)
-
-@login_required
-def event_details(request, event_id):
+def get_event_details(request, event_id):
 	r = requests.get("https://www.eventbriteapi.com/v3/events/" + event_id + "?token=" + MY_TOKEN)
 	response = json.loads(r.text)
 
@@ -116,10 +112,27 @@ def event_details(request, event_id):
 	start = datetime.strptime(response["start"]["local"], "%Y-%m-%dT%H:%M:%S")
 	end = datetime.strptime(response["end"]["local"], "%Y-%m-%dT%H:%M:%S")
 
-	rides_to = Ride.objects.filter(event=event_id, direction="To Event")
-	rides_from = Ride.objects.filter(event=event_id, direction="From Event")
+	return {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end}
 
-	context = {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end, "rides_to": rides_to, "rides_from": rides_from, "id": event_id}
+@login_required
+def welcome(request):
+	rider = Rider.objects.get(user=request.user)
+	events = userEvents(rider, rider.access_token)
+	rides = rider.ride_set.all()
+
+	context = {"events": events, "rider": rider, "rides": rides}
+	return render(request, 'rides/profile.html', context)
+
+@login_required
+def event_details(request, event_id):
+	event = get_event_details(request, event_id)
+
+	rides_to = Ride.objects.filter(event_id=event_id, direction="To Event")
+	rides_from = Ride.objects.filter(event_id=event_id, direction="From Event")
+
+	rides = {"rides_to": rides_to, "rides_from": rides_from, "id": event_id}
+
+	context = dict(event.items() + rides.items())	
 
 	return render(request, 'events/details.html', context)
 
@@ -129,7 +142,11 @@ def ride_add(request, event_id):
 		form = RideForm(request.POST)
 		if form.is_valid():
 			ride = form.save(commit=False)
-			ride.event = event_id
+			ride.event_id = event_id
+
+			context = get_event_details(request, event_id)
+			ride.event_name = context["name"]
+
 			ride.save()
 			ride.riders.add(get_object_or_404(Rider, user=request.user))
 			return HttpResponseRedirect(reverse('rides:event_details', args=(event_id,)))
@@ -155,7 +172,11 @@ def ride_join(request, ride_id):
 @login_required
 def ride_details(request, ride_id):
 	ride = get_object_or_404(Ride, id=ride_id)
-	context = {"ride": ride}
+	rider = get_object_or_404(Rider, user=request.user)
+
+	already_joined = (True if rider in ride.riders.all() else False)
+
+	context = {"ride": ride, "already_joined": already_joined}
 	return render(request, "rides/details.html", context)
 
 # Based off http://www.tangowithdjango.com/book/chapters/login.html

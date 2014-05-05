@@ -35,9 +35,18 @@ Your profile <br><br>
 	</table>
 {% endif %}
 
-<h3>Your Rides:</h3>
+<h2>Your Rides:</h2>
 {% if rides %}
+	<table>
+		<tr><th>Time</th><Event><th>Location</th><th>Direction</th><th>View</th>
 	{% for ride in rides %}
-		<p>Hi</p>
+		<tr>
+			<td>{{ ride.time }}</td>
+			<td>{{ ride.event_name }}</td>
+			<td>{{ ride.location }}</td>
+			<td>{{ ride.direction }}</td>
+			<td><a href="{% url 'rides:ride_details' ride.id %}">View</a></td>
+		</tr>
 	{% endfor %}
+	</table>
 {% endif %}

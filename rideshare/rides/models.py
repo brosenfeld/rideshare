@@ -19,7 +19,8 @@ class Ride(models.Model):
         ("From Event", "From Event"),
     )
 
-	event = models.CharField(max_length=20)
+	event_id = models.CharField(max_length=20)
+	event_name = models.CharField(max_length=40)
 	time = models.DateTimeField()
 	direction = models.CharField(max_length=10, choices=direction_choices)
 	location = models.CharField(max_length=100)

@@ -14,11 +14,7 @@
 			<tr>
 				<td>{{ ride.time }}</td>
 				<td>{{ ride.location }}</td>
-				{% if ride.isFull %}
-					<td>FULL</td>
-				{% else %}
-					<td><a href="{% url 'rides:ride_details' ride.id %}">View</a></td>
-				{% endif %}
+				<td><a href="{% url 'rides:ride_details' ride.id %}">View</a></td>
 			</tr>
 		{% endfor %}
 	</table>
@@ -35,11 +31,7 @@
 			<tr>
 				<td>{{ ride.time }}</td>
 				<td>{{ ride.location }}</td>
-				{% if ride.isFull %}
-					<td>FULL</td>
-				{% else %}
-					<td><a href="{% url 'rides:ride_details' ride.id %}">View</a></td>
-				{% endif %}
+				<td><a href="{% url 'rides:ride_details' ride.id %}">View</a></td>
 		{% endfor %}
 	</table>
 {% else %}
