@@ -27,7 +27,7 @@ class RideForm(forms.ModelForm):
 
     class Meta:
         model = Ride
-        fields = ('date', 'time', 'direction', 'location')
+        fields = ('date', 'time', 'direction', 'location', 'comments', 'capacity')
 
     def clean_time(self):
         time = self.cleaned_data['time']

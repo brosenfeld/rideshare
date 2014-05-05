@@ -5,19 +5,42 @@
 <p>{% autoescape off %}{{ description }}{% endautoescape %}</p>
 
 <h2>Rides</h2>
-{% if rides %}
+<h3>To Event</h3>
+{% if rides_to %}
+
 	<table>
-		<tr><th>direction</th><th>time</th><th>location</th>
-		{% for ride in rides %}
+		<tr><th>time</th><th>location</th><th>capacity</th><th>comments</th></tr>
+		{% for ride in rides_to %}
 			<tr>
-				<td>{{ ride.direction }}</td>
 				<td>{{ ride.time }}</td>
 				<td>{{ ride.location }}</td>
+				<td>{{ ride.capacity }}</td>
+				<td>{{ ride.comments }}</td>
 			</tr>
 		{% endfor %}
 	</table>
 {% else %}
-	There are currently no rides for this event
+	There are currently no rides to this event
 {% endif %}
-<br>
+
+<h3>From Event</h3>
+{% if rides_from %}
+
+	<table>
+		<tr><th>time</th><th>location</th><th>capacity</th><th>comments</th></tr>
+		{% for ride in rides_from %}
+			<tr>
+				<td>{{ ride.time }}</td>
+				<td>{{ ride.location }}</td>
+				<td>{{ ride.capacity }}</td>
+				<td>{{ ride.comments }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% else %}
+	There are currently no rides from this event
+{% endif %}
+
+
+<br><br>
 <a href="{% url 'rides:ride_add' id %}">Add a ride</a>

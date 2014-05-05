@@ -115,9 +115,10 @@ def event_details(request, event_id):
 	start = datetime.strptime(response["start"]["local"], "%Y-%m-%dT%H:%M:%S")
 	end = datetime.strptime(response["end"]["local"], "%Y-%m-%dT%H:%M:%S")
 
-	rides = Ride.objects.filter(event=event_id)
+	rides_to = Ride.objects.filter(event=event_id, direction="To Event")
+	rides_from = Ride.objects.filter(event=event_id, direction="From Event")
 
-	context = {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end, "rides": rides, "id": event_id}
+	context = {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end, "rides_to": rides_to, "rides_from": rides_from, "id": event_id}
 
 	return render(request, 'events/details.html', context)
 

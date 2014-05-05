@@ -24,6 +24,12 @@ class Ride(models.Model):
 	direction = models.CharField(max_length=10, choices=direction_choices)
 	location = models.CharField(max_length=100)
 	riders = models.ManyToManyField(Rider)
+	comments = models.CharField(max_length=100)
+	capacity = models.PositiveIntegerField()
 
 	def __unicode__(self):
 		return self.location + " " + str(self.time)
+
+	def isFull(self):
+		riders = Rider.objects.filter(ride=self).count()
+		full = (True if riders >= capacity else false)
