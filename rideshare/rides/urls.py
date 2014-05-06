@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^event/(?P<event_id>\d+)/rides/add$', views.ride_add, name='ride_add'),
     url(r'^ride/(?P<ride_id>\d+)/details$', views.ride_details, name='ride_details'),
     url(r'^ride/(?P<ride_id>\d+)/join$', views.ride_join, name='ride_join'),
+    url(r'^ride/(?P<ride_id>\d+)/cancel$', views.ride_cancel, name='ride_cancel'),
     url(r'^about/$', views.about, name='about'),
     url(r'^contact/$', views.contact, name='contact'),
 

@@ -51,8 +51,13 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
 					<li class="active"><a href="{% url 'rides:index' %}">Home</a></li>
-					<li><a href="{% url 'rides:user_register' %}">Register</a></li>
-					<li><a href="{% url 'rides:user_login' %}">Sign In</a></li>
+					{% if user.is_authenticated %}
+						<li><a href="{% url 'rides:welcome' %}">Profile</a></li>
+						<li><a href="{% url 'rides:user_logout' %}">Logout</a></li>
+					{% else %}
+						<li><a href="{% url 'rides:user_register' %}">Register</a></li>
+						<li><a href="{% url 'rides:user_login' %}">Sign In</a></li>
+					{% endif %}
 				</ul>
 			</div><!--/.navbar-collapse -->
 		</div>

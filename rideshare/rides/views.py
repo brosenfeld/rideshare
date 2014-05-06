@@ -38,6 +38,8 @@ def userEvents(request, access_token):
 	r = requests.get("https://www.eventbriteapi.com/v3/users/me/orders?token=" + access_token)
 	response = json.loads(r.text)
 
+	rider = get_object_or_404(Rider, user=request.user)
+
 	events = {}
 
 	for order in response['orders']:
@@ -46,11 +48,11 @@ def userEvents(request, access_token):
 		name = event['name']['text']
 
 		try:
-			ride_to = rider.rides_set.get(event_id=event_id, direction="To Event")
+			ride_to = rider.ride_set.get(event_id=event_id, direction="To Event")
 		except Exception, e: ride_to = None
 
 		try:
-			ride_from = rider.rides_set.get(event_id=event_id, direction="From Event")
+			ride_from = rider.ride_set.get(event_id=event_id, direction="From Event")
 		except Exception, e: ride_from = None
 
 
@@ -164,13 +166,24 @@ def ride_join(request, ride_id):
 	rider = get_object_or_404(Rider, user=request.user)
 	ride = get_object_or_404(Ride, id=ride_id)
 
-	if ride.isFull:
+	if ride.isFull():
 		return HttpResponse("This ride is full")
 
 	if rider in ride.riders.all():
 		return HttpResponse("You are already taking this ride.")
 
 	ride.riders.add(rider)
+	return HttpResponseRedirect(reverse('rides:welcome'))
+
+@login_required
+def ride_cancel(request, ride_id):
+	rider = get_object_or_404(Rider, user=request.user)
+	ride = get_object_or_404(Ride, id=ride_id)
+
+	if not rider in ride.riders.all():
+		return HttpResponse("You cannot cancel a ride that you are not taking.")
+
+	ride.riders.remove(rider)
 	return HttpResponseRedirect(reverse('rides:welcome'))
 
 @login_required
