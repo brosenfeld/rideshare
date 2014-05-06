@@ -1,39 +1,35 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>RideShare</title>
-        {% load staticfiles %}
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-       <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" />
-        <script src="{% static 'js/jquery.js' %}"></script>
-        <script src="{% static 'js/jquery-ui-1.10.4.custom.min.js' %}"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
-        <script src="{% static 'js/custom.js' %}"></script>
-    </head>
+{% extends 'base.html' %}
+{% block main %}
+{% load staticfiles %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" />
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/jquery-ui-1.10.4.custom.min.js' %}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+</head>
 
+<body onload="initialize()">
+    <h1>Add Ride</h1>
+    <form id="form" method="post" action="">
 
-    <body onload="initialize()">
-        <h1>Add Ride</h1>
-        <form id="form" method="post" action="">
-  
-            {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
 
-            <table>
-            {% for field in form.visible_fields %}
-                <tr>
-                    <td>{{ field.label }}</td>
-                    <td>{{ field }}</td>                 
-                    <td>{{ field.help_text}}</td>
-                    {% if field.errors %}
-                        <td class="alert alert-danger">{{ field.errors }}</td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </table>
-         <input type="submit" class="" name="submit" value="Submit" />
-        </form>
-    </body>
-</html>
+        <table class="table">
+        {% for field in form.visible_fields %}
+            <tr>
+                <td>{{ field.label }}</td>
+                <td>{{ field }}</td>                 
+                <td>{{ field.help_text}}</td>
+                {% if field.errors %}
+                    <td class="alert alert-danger">{{ field.errors }}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </table>
+        <input type="submit" class="" name="submit" value="Submit" />
+    </form>
+{% endblock %}

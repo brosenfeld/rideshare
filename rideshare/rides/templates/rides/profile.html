@@ -7,9 +7,9 @@
 {% if events %}
 	<table class="table">
 		<tr><th>Name</th><th>To</th><th>From</th>
-	{% for id, name in events.items %}
+	{% for id, event in events.items %}
 		<tr>
-			<td><a href="{% url 'rides:event_details' id %}">{{ name.0 }}</a></td>
+			<td><a href="{% url 'rides:event_details' id %}">{{ event.0 }}</a></td>
 			<td>To</td>
 			<td>From</td>
 		</tr>

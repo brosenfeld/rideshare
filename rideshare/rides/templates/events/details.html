@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block main %}
 <h1>{{ name }}</h1>
 <h3>{{ organizer }}</h3>
 <h3>{{ venue }}</h3>
@@ -8,7 +10,7 @@
 <h3>To Event</h3>
 {% if rides_to %}
 
-	<table>
+	<table class="table">
 		<tr><th>Time</th><th>Location</th><th>Details</th></tr>
 		{% for ride in rides_to %}
 			<tr>
@@ -25,7 +27,7 @@
 <h3>From Event</h3>
 {% if rides_from %}
 
-	<table>
+	<table class="table">
 		<tr><th>Time</th><th>Location</th><th>Details</th></tr>
 		{% for ride in rides_from %}
 			<tr>
@@ -41,3 +43,4 @@
 
 <br><br>
 <a href="{% url 'rides:ride_add' id %}">Add a ride</a>
+{% endblock %}
