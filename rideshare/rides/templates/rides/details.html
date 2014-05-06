@@ -8,5 +8,8 @@
 	<tr><th>Status:</th><td>{% if already_joined %}ALREADY JOINED{% elif ride.isFull %}FULL{% else %}<a href="{% url 'rides:ride_join' ride.id %}">Join</a>{% endif %}</td></tr>
 </table>
 <br>
-<a href="{% url 'rides:event_details' ride.event_id %}">Return to Event Page</a>
+<a class="btn btn-default" href="{% url 'rides:event_details' ride.event_id %}">Return to Event Page</a>
+{% if already_joined %}
+	<a class="btn btn-default" href="{% url 'rides:ride_cancel' ride.id %}">Cancel Ride</a>
+{% endif %}
 {% endblock %}
