@@ -10,7 +10,7 @@
 	<title>RideShare - Find Your Next Ride with Us</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load staticfiles %}
+	{% load staticfiles %}
 	<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/isotope.css'%}" media="screen" />	
 	<link rel="stylesheet" href="{% static 'js/fancybox/jquery.fancybox.css' %}" type="text/css" media="screen" />
@@ -38,36 +38,31 @@
 </head>
 
 <body>
-	<section id="header" class="appear"></section>
-	<div class="navbar navbar-fixed-top" role="navigation" data-0="line-height:100px; height:100px; background-color:rgba(0,0,0,0.3);" data-300="line-height:60px; height:60px; background-color:rgba(0,0,0,1);">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="fa fa-bars color-white"></span>
-				</button>
-				<h1><a class="navbar-brand" href="{% url 'rides:index' %}" data-0="line-height:90px;" data-300="line-height:50px;">			RideShare
-				</a></h1>
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
-					<li class="active"><a href="{% url 'rides:index' %}">Home</a></li>
-					{% if user.is_authenticated %}
+	<section id="header" class="appear">
+		<div class="navbar navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
+						<li><a style='font-size:25px' class="navbar-brand" href="{% url 'rides:index' %}" >SplitaLift</a></li>
+						<li class="active"><a href="{% url 'rides:index' %}">Home</a></li>
+						{% if user.is_authenticated %}
 						<li><a href="{% url 'rides:welcome' %}">Profile</a></li>
 						<li><a href="{% url 'rides:user_logout' %}">Logout</a></li>
-					{% else %}
+						{% else %}
 						<li><a href="{% url 'rides:user_register' %}">Register</a></li>
 						<li><a href="{% url 'rides:user_login' %}">Sign In</a></li>
-					{% endif %}
-				</ul>
-			</div><!--/.navbar-collapse -->
+						{% endif %}
+					</ul>
+				</div><!--/.navbar-collapse -->
+			</div>
 		</div>
-	</div>
+	</section>
 
 	<section class="featured">
 		<div class="container"> 
 			<div class="row mar-bot40">
-					{% block main %}
-					{% endblock main %}
+				{% block main %}
+				{% endblock main %}
 			</div>
 		</div>
 	</section>
@@ -97,4 +92,4 @@
 
 	</section>
 	<a href="#header" class="scrollup"><i class="fa fa-chevron-up"></i></a>	
-</html>
+	</html>
