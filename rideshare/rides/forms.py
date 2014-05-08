@@ -23,7 +23,8 @@ class UserLoginForm(forms.ModelForm):
 class RideForm(forms.ModelForm):
     date = forms.DateField()
     time = forms.TimeField(input_formats = ['%H:%M', '%I:%M%p', '%I:%M %p'] )
-    direction = forms.ChoiceField(widget=forms.RadioSelect, choices=Ride.direction_choices)
+    direction = forms.ChoiceField(widget=forms.Select, choices=Ride.direction_choices)
+    location = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}), max_length=100, help_text="Please select with Google Maps")
 
     class Meta:
         model = Ride
