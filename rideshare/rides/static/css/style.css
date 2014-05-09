@@ -439,7 +439,7 @@
 
   section.general-main{
   	padding: 125px 0 60px;
-  	background: #70B9B0;
+  	background: #5CCCCC;
   	/*color: #fdfdfd;*/
   }
 
@@ -456,7 +456,7 @@
   }
 
   section.featured.a {
-  	color: white;
+  	color: #70B9B0;
   }
   
   
