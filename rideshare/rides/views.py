@@ -202,7 +202,9 @@ def ride_details(request, ride_id):
 
 	already_joined = (True if rider in ride.riders.all() else False)
 
-	context = {"ride": ride, "already_joined": already_joined}
+	location = ride.location.replace(" ", "+")
+
+	context = {"ride": ride, "already_joined": already_joined, "location":location}
 	return render(request, "rides/details.html", context)
 
 # Based off http://www.tangowithdjango.com/book/chapters/login.html
