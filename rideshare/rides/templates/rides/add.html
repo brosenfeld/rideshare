@@ -65,10 +65,9 @@
 
 <body onload="initialize()">
     <h1>Add Ride</h1>
-
-    <input id="pac-input" class="controls" type="text"
-    placeholder="Enter a location">
+    <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
     <div id="map-canvas" style="height: 200px"></div>
+
     <form id="form" method="post" action="">
 
         {% csrf_token %}
@@ -77,13 +76,16 @@
         {% endfor %}
 
         <table class="table">
-        <tr>
-        <td>{{ form.date.label}}</td>{{ form.date }}</td>{{ form.date.help_text }}{% if form.date.errors %}<td class="alert alert-danger">{{ field.errors }}</td>{% endif %}</td>
-
         {% for field in form.visible_fields %}
             <tr>
                 <td>{{ field.label }}</td>
-                <td>{{ field }}</td>                 
+
+                {% ifequal field.label "Location" %}
+                    <td>Use the Google Map above to enter the location</td>
+                {% else %}
+                    <td>{{ field }}</td>                 
+                {% endifequal %}
+                
                 <td>{{ field.help_text}}</td>
                 {% if field.errors %}
                     <td class="alert alert-danger">{{ field.errors }}</td>
