@@ -1,25 +1,39 @@
 {% extends 'base.html' %}
 {% block main %}
-<h1>Login</h1>
+<br><br>
+<br><br>
 <form id="form" method="post" action="">
+    <div class="row centered-form">
+        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Login Here <small>Welcome Back!</small></h3>
+                </div>
+                <div class="panel-body">
+                    {% csrf_token %}
+                    {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                    {% endfor %}
 
-    {% csrf_token %}
-    {% for hidden in form.hidden_fields %}
-        {{ hidden }}
-    {% endfor %}
+                    <table class="table">
+                        {% for field in form.visible_fields %}
+                        <tr>
+                            <td>{{ field.label }}</td>
+                            <td>{{ field }}</td>                 
+                            <td>{{ field.help_text}}</td>
+                            {% if field.errors %}
+                            <td class="alert alert-danger">{{ field.errors }}</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <input type="submit" class="btn btn-info btn-block" name="submit" value="Sign In" />
 
-    <table class="table">
-    {% for field in form.visible_fields %}
-        <tr>
-            <td>{{ field.label }}</td>
-            <td>{{ field }}</td>                 
-            <td>{{ field.help_text}}</td>
-            {% if field.errors %}
-                <td class="alert alert-danger">{{ field.errors }}</td>
-            {% endif %}
-        </tr>
-    {% endfor %}
-    </table>
- <input type="submit" class="btn" name="submit" value="Submit" />
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
+
+<br><br>
 {% endblock %}
