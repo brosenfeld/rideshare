@@ -1,7 +1,8 @@
 $(function() {
-    $( "#id_date" ).datepicker();
+    $( "#id_time" ).datepicker();
 });
 
+// Most of this code comes from the Google documentation
 function initialize(lat, longitutde) {
   var mapOptions = {
     center: new google.maps.LatLng(lat, longitutde),
