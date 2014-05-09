@@ -2,10 +2,10 @@ $(function() {
     $( "#id_date" ).datepicker();
 });
 
-function initialize() {
+function initialize(lat, longitutde) {
   var mapOptions = {
-    center: new google.maps.LatLng(-33.8688, 151.2195),
-    zoom: 13
+    center: new google.maps.LatLng(lat, longitutde),
+    zoom: 14
   };
   var map = new google.maps.Map(document.getElementById('map-canvas'),
     mapOptions);

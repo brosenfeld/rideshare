@@ -120,11 +120,10 @@ def get_event_details(request, event_id):
 	longitude = response["venue"]["longitude"]
 	latitude = response["venue"]["latitude"]
 
-	if latitude != 0.0 or longitude != 0.0:
+	if float(latitude) != 0.0 or float(longitude) != 0.0:
 		geo = str(latitude) + ", " + str(longitude)
 	else:
 		geo = None
-
 
 	start = datetime.strptime(response["start"]["local"], "%Y-%m-%dT%H:%M:%S")
 	end = datetime.strptime(response["end"]["local"], "%Y-%m-%dT%H:%M:%S")
@@ -155,21 +154,20 @@ def event_details(request, event_id):
 
 @login_required
 def ride_add(request, event_id):
+	context = get_event_details(request, event_id)
+
 	if request.method == 'POST':
 		form = RideForm(request.POST)
 		if form.is_valid():
 			ride = form.save(commit=False)
 			ride.event_id = event_id
-
-			context = get_event_details(request, event_id)
 			ride.event_name = context["name"]
-
 			ride.save()
 			ride.riders.add(get_object_or_404(Rider, user=request.user))
 			return HttpResponseRedirect(reverse('rides:event_details', args=(event_id,)))
 	else:
 		form = RideForm()
-	context = {'form':form}
+	context = {'form':form, 'geo': context['geo']}
 	return render(request, 'rides/add.html', context)
 
 @login_required

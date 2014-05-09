@@ -8,6 +8,13 @@
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 <script src="{% static 'js/custom.js' %}"></script>
 
+<script src="{% static 'js/bootstrap-2.2.2.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-timepicker.min.js' %}"></script>
+
+<script type="text/javascript">
+    $('#id_time').timepicker();
+</script>
+
 <style>
       html, body, #map-canvas {
         height: 100%;
@@ -60,10 +67,9 @@
 }
 
     </style>
-
 </head>
 
-<body onload="initialize()">
+<body onload="initialize({% if geo %}{{ geo }}{% else %}40.349566, -74.652986{% endif %})">
     <h1>Add Ride</h1>
     <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
     <div id="map-canvas" style="height: 200px"></div>
@@ -79,7 +85,7 @@
         {% for field in form.visible_fields %}
             <tr>
                 <td>{{ field.label }}</td>
-                <td>{{ field }}</td>                 
+                <td>{{ field }}</td>           
                 <td>{{ field.help_text}}</td>
                 {% if field.errors %}
                     <td class="alert alert-danger">{{ field.errors }}</td>
