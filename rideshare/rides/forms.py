@@ -24,7 +24,7 @@ class RideForm(forms.ModelForm):
     date = forms.DateField()
     time = forms.TimeField(input_formats = ['%H:%M', '%I:%M%p', '%I:%M %p'] )
     direction = forms.ChoiceField(widget=forms.Select, choices=Ride.direction_choices)
-    location = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}), max_length=100)
+    location = forms.CharField(widget=forms.TextInput(attrs={'readonly':'readonly'}), max_length=100, initial="Select location with Google Maps")
 
     class Meta:
         model = Ride
@@ -34,4 +34,10 @@ class RideForm(forms.ModelForm):
         time = self.cleaned_data['time']
         date = self.cleaned_data['date']
         return datetime.combine(date, time)
+
+    def clean_location(self):
+        location = self.cleaned_data['location']
+        if location == "Select location with Google Maps":
+            raise forms.ValidationError("Please select a location")
+        return location
 

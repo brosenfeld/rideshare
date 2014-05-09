@@ -79,13 +79,7 @@
         {% for field in form.visible_fields %}
             <tr>
                 <td>{{ field.label }}</td>
-
-                {% ifequal field.label "Location" %}
-                 <td>Use the Google Map above to enter the location<input id="id_location" name="location" type="text" hidden></td>
-                {% else %}
-                    <td>{{ field }}</td>                 
-                {% endifequal %}
-                
+                <td>{{ field }}</td>                 
                 <td>{{ field.help_text}}</td>
                 {% if field.errors %}
                     <td class="alert alert-danger">{{ field.errors }}</td>

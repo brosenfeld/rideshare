@@ -6,6 +6,14 @@
 <h4>{{ start }} - {{ end }}</h4>
 <p>{% autoescape off %}{{ description }}{% endautoescape %}</p>
 
+{% if geo %}
+	<h3>hello</h3>
+{% else %}
+	<h3>hi</h3>
+{% endif %}
+
+
+
 <h2>Rides</h2>
 <h3>To Event</h3>
 {% if rides_to %}

@@ -117,10 +117,19 @@ def get_event_details(request, event_id):
 	description = response["description"]["html"]
 	organizer = response["organizer"]["name"]
 	venue = response["venue"]["name"]
+	longitude = response["venue"]["longitude"]
+	latitude = response["venue"]["latitude"]
+
+	if latitude != 0.0 or longitude != 0.0:
+		geo = str(latitude) + ", " + str(longitude)
+	else:
+		geo = None
+
+
 	start = datetime.strptime(response["start"]["local"], "%Y-%m-%dT%H:%M:%S")
 	end = datetime.strptime(response["end"]["local"], "%Y-%m-%dT%H:%M:%S")
 
-	return {"name": name, "description": description, "organizer": organizer, "venue": venue, "start": start, "end": end}
+	return {"name": name, "description": description, "organizer": organizer, "venue": venue, "geo": geo, "start": start, "end": end}
 
 @login_required
 def welcome(request):
