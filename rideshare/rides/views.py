@@ -108,6 +108,8 @@ def get_event_details(request, event_id):
 	r = requests.get("https://www.eventbriteapi.com/v3/events/" + event_id + "?token=" + MY_TOKEN)
 	response = json.loads(r.text)
 
+	#print response
+
 	if 'error_description' in response:
 		return render(request, 'events/invalid.html', {})
 

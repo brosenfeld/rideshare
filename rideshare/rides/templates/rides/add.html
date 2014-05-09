@@ -81,7 +81,7 @@
                 <td>{{ field.label }}</td>
 
                 {% ifequal field.label "Location" %}
-                    <td>Use the Google Map above to enter the location</td>
+                 <td>Use the Google Map above to enter the location<input id="id_location" name="location" type="text" hidden></td>
                 {% else %}
                     <td>{{ field }}</td>                 
                 {% endifequal %}

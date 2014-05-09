@@ -32,7 +32,7 @@ function initialize() {
     marker.setVisible(false);
     var place = autocomplete.getPlace();
 
-    $( "#id_location").val($('#pac-input').val());
+    $( "#id_location" ).val($('#pac-input').val());
 
     if (!place.geometry) {
       return;
