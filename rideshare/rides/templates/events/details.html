@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
 {% block main %}
+<script type="text/javascript">
+function showMoreInfo(){
+	$('.moreInfo').removeClass('hidden');
+	$('.showMoreInfoButton').addClass('hidden');
+	$('.hideMoreInfoButton').removeClass('hidden');
+}
+
+function hideMoreInfo(){
+	$('.moreInfo').addClass('hidden');
+	$('.showMoreInfoButton').removeClass('hidden');
+	$('.hideMoreInfoButton').addClass('hidden');
+}
+
+</script>
+
 <h1>{{ name }}</h1>
-<h3>{{ organizer }}</h3>
-<h3>{{ venue }}</h3>
-<h4>{{ start }} - {{ end }}</h4>
-<p>{% autoescape off %}{{ description }}{% endautoescape %}</p>
+
 
 <h2>Rides</h2>
 <h3>To Event</h3>
@@ -42,5 +54,17 @@
 
 
 <br><br>
-<a class="btn btn-default" href="{% url 'rides:ride_add' id %}">Add a ride</a>
+<a class="btn btn-default" href="{% url 'rides:ride_add' id %}">Add a ride</a><br><br>
+
+<a class="btn btn-primary showMoreInfoButton" onclick="showMoreInfo()">Show More Info</a>
+<a class="btn btn-primary hideMoreInfoButton hidden" onclick="hideMoreInfo()">Hide More Info</a>
+<div class="moreInfo hidden">
+<h3>{{ organizer }}</h3>
+<h3>{{ venue }}</h3>
+<h4>{{ start }} - {{ end }}</h4>
+<p>{% autoescape off %}{{ description }}{% endautoescape %}</p>
+<div>
+
+
+
 {% endblock %}
