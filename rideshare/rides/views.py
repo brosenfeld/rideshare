@@ -83,11 +83,18 @@ def eventbrite_permission(request):
 @login_required
 def eventbrite_link(request):
 	if request.method == 'GET':
+
+		if 'error' in request.GET:
+			user = request.user
+			logout(request)
+			user.delete()
+
+			return render(request, 'rides/missing.html', {})
+
+
+		print str(request.GET)
 		if 'code' in request.GET:
 			access_token = postCode(request.GET['code'])
-
-			if access_token == "error":
-				return render(request, 'rides/missing.html', {})
 
 			linkRider(request, access_token)
 
