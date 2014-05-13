@@ -4,7 +4,7 @@ from rides.models import Rider, Ride
 from rides.forms import UserForm, UserLoginForm, RideForm
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.core.urlresolvers import reverse
 
@@ -15,6 +15,16 @@ from datetime import datetime
 CLIENT_KEY = "BBGT36XVYX5H2RXV7I"
 CLIENT_SECRET = "367KMPCJEB7JMNMVIIWGYMRV5WVWRVV7FOEXA66WO7I43CU5I4"
 MY_TOKEN = "6J5TDH6BJRP4BKARHCMJ"
+
+def validUser(user):
+	try:
+		rider = Rider.objects.get(user=user)
+		return True
+	except Exception, e:
+		return False
+
+def invalid(request):
+	return render(request, 'invalid.html', {})
 
 def postCode(code):
 	url = "https://www.eventbrite.com/oauth/token"
@@ -91,8 +101,6 @@ def eventbrite_link(request):
 
 			return render(request, 'rides/missing.html', {})
 
-
-		print str(request.GET)
 		if 'code' in request.GET:
 			access_token = postCode(request.GET['code'])
 
@@ -138,8 +146,10 @@ def get_event_details(request, event_id):
 	return {"name": name, "description": description, "organizer": organizer, "venue": venue, "geo": geo, "start": start, "end": end}
 
 @login_required
+@user_passes_test(validUser, login_url='/invalid/')
 def welcome(request):
 	rider = Rider.objects.get(user=request.user)
+
 	events = userEvents(rider, rider.access_token)
 	rides = rider.ride_set.all()
 
@@ -147,6 +157,7 @@ def welcome(request):
 	return render(request, 'rides/profile.html', context)
 
 @login_required
+@user_passes_test(validUser, login_url='/invalid/')
 def event_details(request, event_id):
 	event = get_event_details(request, event_id)
 
@@ -160,6 +171,7 @@ def event_details(request, event_id):
 	return render(request, 'events/details.html', context)
 
 @login_required
+@user_passes_test(validUser, login_url='/invalid/')
 def ride_add(request, event_id):
 	context = get_event_details(request, event_id)
 
@@ -178,6 +190,7 @@ def ride_add(request, event_id):
 	return render(request, 'rides/add.html', context)
 
 @login_required
+@user_passes_test(validUser, login_url='/invalid/')
 def ride_join(request, ride_id):
 	rider = get_object_or_404(Rider, user=request.user)
 	ride = get_object_or_404(Ride, id=ride_id)
@@ -192,6 +205,7 @@ def ride_join(request, ride_id):
 	return HttpResponseRedirect(reverse('rides:welcome'))
 
 @login_required
+@user_passes_test(validUser, login_url='/invalid/')
 def ride_cancel(request, ride_id):
 	rider = get_object_or_404(Rider, user=request.user)
 	ride = get_object_or_404(Ride, id=ride_id)
@@ -203,6 +217,7 @@ def ride_cancel(request, ride_id):
 	return HttpResponseRedirect(reverse('rides:welcome'))
 
 @login_required
+@user_passes_test(validUser, login_url='/invalid/')
 def ride_details(request, ride_id):
 	ride = get_object_or_404(Ride, id=ride_id)
 	rider = get_object_or_404(Rider, user=request.user)

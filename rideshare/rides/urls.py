@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     url(r'^eventbrite$', views.eventbrite_permission, name='eventbrite_permission'),
     url(r'^eventbrite/link/', views.eventbrite_link, name='eventbrite_link'),
     url(r'^welcome/$', views.welcome, name='welcome'),
+    url(r'^invalid/$', views.invalid, name='invalid'),
     url(r'^event/(?P<event_id>\d+)/details/$', views.event_details, name='event_details'),
     url(r'^register/$', views.user_register, name='user_register'),
     url(r'^accounts/login/', views.user_login, name='user_login'),
@@ -17,6 +18,4 @@ urlpatterns = patterns('',
     url(r'^ride/(?P<ride_id>\d+)/cancel$', views.ride_cancel, name='ride_cancel'),
     url(r'^about/$', views.about, name='about'),
     url(r'^contact/$', views.contact, name='contact'),
-
-
 )
